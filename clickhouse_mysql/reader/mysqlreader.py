@@ -289,10 +289,8 @@ class MySQLReader(Reader):
                 event = Event()
                 event.schema = mysql_event.schema
                 event.table = mysql_event.table
-                logging.info("Accessing values from row being inserts")
                 event.row = row['values']
-                logging.debug("Failing to access rows from being inserted")
-                
+
                 self.process_first_event(event=event)
                 self.notify('WriteRowsEvent.EachRow', event=event)
 
