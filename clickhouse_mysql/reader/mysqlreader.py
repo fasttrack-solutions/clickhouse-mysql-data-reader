@@ -289,8 +289,10 @@ class MySQLReader(Reader):
                 event = Event()
                 event.schema = mysql_event.schema
                 event.table = mysql_event.table
+                logging.info("Accessing values from row being inserts")
                 event.row = row['values']
-
+                logging.debug("Failing to access rows from being inserted")
+                
                 self.process_first_event(event=event)
                 self.notify('WriteRowsEvent.EachRow', event=event)
 
@@ -352,7 +354,6 @@ class MySQLReader(Reader):
                     logging.info("SIGINT received. Pass it further.")
                     raise
                 except Exception as ex:
-                    logging.info("My FUCKING exception got it")
                     if self.blocking:
                         # we'd like to continue waiting for data
                         # report and continue cycle
