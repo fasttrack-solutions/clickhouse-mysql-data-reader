@@ -356,7 +356,7 @@ class MySQLReader(Reader):
                         logging.warning(ex)
                     else:
                         # do not continue, report error and exit
-                        logging.critical("Got an exception, abort it in fataling mode")
+                        logging.critical("Got an exception, abort in fataling mode")
                         logging.critical(ex)
                         sys.exit(1)
 
