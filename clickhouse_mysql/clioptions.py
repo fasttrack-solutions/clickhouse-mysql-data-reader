@@ -409,7 +409,7 @@ class CLIOptions(Options):
         argparser.add_argument(
             '--src-fatal-on-exception',
             action='store_true',
-            help='Wait indefinitely for new records to come.'
+            help='Fatal when meeting an exception.'
         )
         argparser.add_argument(
             '--src-resume',
