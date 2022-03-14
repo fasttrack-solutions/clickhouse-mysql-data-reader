@@ -26,6 +26,7 @@ class MySQLReader(Reader):
     tables = None
     tables_prefixes = None
     blocking = None
+    fatal_on_exception = None
     resume_stream = None
     binlog_stream = None
     nice_pause = 0
