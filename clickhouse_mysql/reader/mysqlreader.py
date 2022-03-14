@@ -352,7 +352,8 @@ class MySQLReader(Reader):
                     logging.info("SIGINT received. Pass it further.")
                     raise
                 except Exception as ex:
-                    if not self.fatal_on_exception:
+                    logging.info("My FUCKING exception got it")
+                    if self.blocking:
                         # we'd like to continue waiting for data
                         # report and continue cycle
                         logging.warning("Got an exception, skip it in non-fataling mode")
