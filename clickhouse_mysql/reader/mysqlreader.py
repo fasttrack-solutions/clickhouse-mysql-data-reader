@@ -45,6 +45,7 @@ class MySQLReader(Reader):
             tables=None,
             tables_prefixes=None,
             blocking=None,
+            fatal_on_exception=None,
             resume_stream=None,
             nice_pause=None,
             binlog_position_file=None,
@@ -60,6 +61,7 @@ class MySQLReader(Reader):
         self.tables = None if tables is None else TableProcessor.extract_tables(tables)
         self.tables_prefixes = None if tables_prefixes is None else TableProcessor.extract_tables(tables_prefixes)
         self.blocking = blocking
+        self.fatal_on_exception = fatal_on_exception
         self.resume_stream = resume_stream
         self.nice_pause = nice_pause
         self.binlog_position_file=binlog_position_file
@@ -124,6 +126,7 @@ class MySQLReader(Reader):
             log_pos=self.log_pos,
             freeze_schema=True,  # If true do not support ALTER TABLE. It's faster.
             blocking=False,
+            fatal_on_exception=False,
             resume_stream=self.resume_stream,
         )
 
