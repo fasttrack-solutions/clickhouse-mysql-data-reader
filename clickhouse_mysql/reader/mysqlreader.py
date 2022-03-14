@@ -127,7 +127,6 @@ class MySQLReader(Reader):
             log_pos=self.log_pos,
             freeze_schema=True,  # If true do not support ALTER TABLE. It's faster.
             blocking=False,
-            fatal_on_exception=False,
             resume_stream=self.resume_stream,
         )
 
