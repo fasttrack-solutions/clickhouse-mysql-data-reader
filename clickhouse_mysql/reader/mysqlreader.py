@@ -311,7 +311,7 @@ class MySQLReader(Reader):
         self.init_read_events()
 
         # fetch events
-        try:
+        # try:
             while True:
                 logging.debug('Check events in binlog stream')
 
@@ -375,11 +375,11 @@ class MySQLReader(Reader):
 
                 self.notify('ReaderIdleEvent')
 
-        except KeyboardInterrupt:
-            logging.info("SIGINT received. Time to exit.")
-        except Exception as ex:
-            logging.warning("Got an exception, handle it")
-            logging.warning(ex)
+        # except KeyboardInterrupt:
+        #     logging.info("SIGINT received. Time to exit.")
+        # except Exception as ex:
+        #     logging.warning("Got an exception, handle it")
+        #     logging.warning(ex)
 
         try:
             self.binlog_stream.close()
