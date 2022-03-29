@@ -381,6 +381,11 @@ class MySQLReader(Reader):
         except KeyboardInterrupt:
             logging.info("SIGINT received. Time to exit.")
         except Exception as ex:
+          if self.fatal_on_exception:
+            logging.critical("Got an exception, handle it")
+            logging.critical(ex)
+            sys.exit(1)
+          else:
             logging.warning("Got an exception, handle it")
             logging.warning(ex)
 
