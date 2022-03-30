@@ -314,91 +314,91 @@ class MySQLReader(Reader):
         self.init_read_events()
 
         # fetch events
-        try:
-            while True:
-                logging.debug('Check events in binlog stream')
+        # try:
+        while True:
+            logging.debug('Check events in binlog stream')
 
-                self.init_fetch_loop()
+            self.init_fetch_loop()
 
-                # statistics
-                self.stat_init_fetch_loop()
+            # statistics
+            self.stat_init_fetch_loop()
 
-                try:
-                    logging.debug('Pre-start binlog position: ' + self.binlog_stream.log_file + ":" + str(self.binlog_stream.log_pos) if self.binlog_stream.log_pos is not None else "undef")
+            # try:
+            logging.debug('Pre-start binlog position: ' + self.binlog_stream.log_file + ":" + str(self.binlog_stream.log_pos) if self.binlog_stream.log_pos is not None else "undef")
 
-                    # fetch available events from MySQL
-                    for mysql_event in self.binlog_stream:
-                        # new event has come
-                        # check what to do with it
+            # fetch available events from MySQL
+            for mysql_event in self.binlog_stream:
+                # new event has come
+                # check what to do with it
 
-                        logging.debug('Got Event ' + self.binlog_stream.log_file + ":" + str(self.binlog_stream.log_pos))
+                logging.debug('Got Event ' + self.binlog_stream.log_file + ":" + str(self.binlog_stream.log_pos))
 
-                        # process event based on its type
-                        if isinstance(mysql_event, WriteRowsEvent):
-                            self.process_write_rows_event(mysql_event)
-                        elif isinstance(mysql_event, DeleteRowsEvent):
-                            self.process_delete_rows_event(mysql_event)
-                        elif isinstance(mysql_event, UpdateRowsEvent):
-                            self.process_update_rows_event(mysql_event)
-                        else:
-                            # skip other unhandled events
-                            pass
+                # process event based on its type
+                if isinstance(mysql_event, WriteRowsEvent):
+                    self.process_write_rows_event(mysql_event)
+                elif isinstance(mysql_event, DeleteRowsEvent):
+                    self.process_delete_rows_event(mysql_event)
+                elif isinstance(mysql_event, UpdateRowsEvent):
+                    self.process_update_rows_event(mysql_event)
+                else:
+                    # skip other unhandled events
+                    pass
 
-                        # after event processed, we need to handle current binlog position
-                        self.process_binlog_position(self.binlog_stream.log_file, self.binlog_stream.log_pos)
+                # after event processed, we need to handle current binlog position
+                self.process_binlog_position(self.binlog_stream.log_file, self.binlog_stream.log_pos)
 
-                except KeyboardInterrupt:
-                    # pass SIGINT further
-                    logging.info("SIGINT received. Pass it further.")
-                    raise
-                except Exception as ex:
-                    if self.blocking:
-                        # we'd like to continue waiting for data
-                        # report and continue cycle
-                        if self.fatal_on_exception:
-                          logging.critical("Got an exception, skip it in non-fataling mode")
-                          logging.critical(ex)
-                          sys.exit(1)
-                        else:
-                          logging.warning("Got an exception, skip it in non-fataling mode")
-                          logging.warning(ex)
-                    else:
-                        # do not continue, report error and exit
-                        logging.critical("Got an exception, abort in fataling mode")
-                        logging.critical(ex)
-                        sys.exit(1)
+            # except KeyboardInterrupt:
+            #     # pass SIGINT further
+            #     logging.info("SIGINT received. Pass it further.")
+            #     raise
+            # except Exception as ex:
+            #     if self.blocking:
+            #         # we'd like to continue waiting for data
+            #         # report and continue cycle
+            #         if self.fatal_on_exception:
+            #           logging.critical("Got an exception, abort it in fataling mode")
+            #           logging.critical(ex)
+            #           sys.exit(1)
+            #         else:
+            #           logging.warning("Got an exception, skip it in non-fataling mode")
+            #           logging.warning(ex)
+            #     else:
+            #         # do not continue, report error and exit
+            #         logging.critical("Got an exception, abort in fataling mode")
+            #         logging.critical(ex)
+            #         sys.exit(1)
 
-                # all events fetched (or none of them available)
+            # all events fetched (or none of them available)
 
-                # statistics
-                self.stat_close_fetch_loop()
+            # statistics
+            self.stat_close_fetch_loop()
 
-                if not self.blocking:
-                    # do not wait for more data - all done
-                    break  # while True
+            if not self.blocking:
+                # do not wait for more data - all done
+                break  # while True
 
-                # blocking - wait for more data
-                if self.nice_pause > 0:
-                    time.sleep(self.nice_pause)
+            # blocking - wait for more data
+            if self.nice_pause > 0:
+                time.sleep(self.nice_pause)
 
-                self.notify('ReaderIdleEvent')
+            self.notify('ReaderIdleEvent')
 
-        except KeyboardInterrupt:
-            logging.info("SIGINT received. Time to exit.")
-        except Exception as ex:
-          if self.fatal_on_exception:
-            logging.critical("Got an exception, handle it")
-            logging.critical(ex)
-            sys.exit(1)
-          else:
-            logging.warning("Got an exception, handle it")
-            logging.warning(ex)
+        # except KeyboardInterrupt:
+        #     logging.info("SIGINT received. Time to exit.")
+        # except Exception as ex:
+        #   if self.fatal_on_exception:
+        #     logging.critical("Got an exception, handle it")
+        #     logging.critical(ex)
+        #     sys.exit(1)
+        #   else:
+        #     logging.warning("Got an exception, handle it")
+        #     logging.warning(ex)
 
-        try:
-            self.binlog_stream.close()
-        except Exception as ex:
-            logging.warning("Unable to close binlog stream correctly")
-            logging.warning(ex)
+        # try:
+        #     self.binlog_stream.close()
+        # except Exception as ex:
+        #     logging.warning("Unable to close binlog stream correctly")
+        #     logging.warning(ex)
 
         end_timestamp = int(time.time())
 
