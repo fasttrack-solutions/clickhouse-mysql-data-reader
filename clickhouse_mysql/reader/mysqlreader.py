@@ -355,7 +355,7 @@ class MySQLReader(Reader):
                     if self.fatal_on_exception:
                         # we'd like to continue waiting for data
                         # report and continue cycle
-                        print(self.fatal_on_exception)
+                        logging.info("this is the current status of the new flag added", self.fatal_on_exception)
                         logging.critical("Got an exception, abort in fataling mode")
                         logging.critical(ex)
                         sys.exit(1)
