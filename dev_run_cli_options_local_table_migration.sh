@@ -54,7 +54,7 @@ $PYTHON $CH_MYSQL ${*:1} \
     --pump-data \
     --migrate-table \
     --src-wait \
-    --src-fatal-on-exception\
+    --src-fatal-on-exception \
     --src-resume
 
 #    --dst-schema="${DST_SCHEMA}" \
