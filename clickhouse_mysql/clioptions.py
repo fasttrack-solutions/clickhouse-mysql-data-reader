@@ -160,6 +160,7 @@ class CLIOptions(Options):
         'src_tables_where_clauses': None,
         'src_tables_prefixes': None,
         'src_wait': False,
+        'src_fatal_on_exception': False,
         'src_resume': False,
         'src_binlog_file': None,
         'src_binlog_position': None,
@@ -406,6 +407,11 @@ class CLIOptions(Options):
             help='Wait indefinitely for new records to come.'
         )
         argparser.add_argument(
+            '--src-fatal-on-exception',
+            action='store_true',
+            help='Fatal when meeting an exception.'
+        )
+        argparser.add_argument(
             '--src-resume',
             action='store_true',
             help='Resume reading from previous position. Previous position is read from `binlog-position-file`'
@@ -609,6 +615,7 @@ class CLIOptions(Options):
             'src_tables_where_clauses': [x for x in args.src_tables_where_clauses.split(',') if x] if args.src_tables_where_clauses else self.default_options['src_tables_where_clauses'],
             'src_tables_prefixes': [x for x in args.src_tables_prefixes.split(',') if x] if args.src_tables_prefixes else self.default_options['src_tables_prefixes'],
             'src_wait': args.src_wait,
+            'src_fatal_on_exception': args.src_fatal_on_exception,
             'src_resume': args.src_resume,
             'src_binlog_file': args.src_binlog_file,
             'src_binlog_position': args.src_binlog_position,

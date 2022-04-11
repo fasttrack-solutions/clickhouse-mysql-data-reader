@@ -23,6 +23,7 @@ $PYTHON $CH_MYSQL ${*:1} \
     --src-server-id=1 \
     --src-resume \
     --src-wait \
+    --src-fatal-on-exception \
     --nice-pause=1 \
     --log-level=info \
     --log-file=ontime.log \
