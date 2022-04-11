@@ -317,7 +317,7 @@ class MySQLReader(Reader):
         try:
             while True:
                 logging.debug('Check events in binlog stream')
-                print("this is the current status of the new flag added", self.fatal_on_exception)
+                print("FATAL ON EXCEPTION FLAG HAS VALUE", self.fatal_on_exception)
 
                 self.init_fetch_loop()
 
@@ -353,6 +353,9 @@ class MySQLReader(Reader):
                     logging.info("SIGINT received. Pass it further.")
                     raise
                 except Exception as ex:
+
+                    print("did we enter into the exception at least?", self.fatal_on_exception)
+
                     if self.fatal_on_exception:
                         # we'd like to continue waiting for data
                         # report and continue cycle
