@@ -317,7 +317,7 @@ class MySQLReader(Reader):
         try:
             while True:
                 logging.debug('Check events in binlog stream')
-                logging.info("this is the current status of the new flag added", self.fatal_on_exception)
+                print("this is the current status of the new flag added", self.fatal_on_exception)
 
                 self.init_fetch_loop()
 
