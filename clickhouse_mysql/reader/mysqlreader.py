@@ -26,6 +26,7 @@ class MySQLReader(Reader):
     tables = None
     tables_prefixes = None
     blocking = None
+    fatal_on_exception = None
     resume_stream = None
     binlog_stream = None
     nice_pause = 0
@@ -45,6 +46,7 @@ class MySQLReader(Reader):
             tables=None,
             tables_prefixes=None,
             blocking=None,
+            fatal_on_exception=None,
             resume_stream=None,
             nice_pause=None,
             binlog_position_file=None,
@@ -60,6 +62,7 @@ class MySQLReader(Reader):
         self.tables = None if tables is None else TableProcessor.extract_tables(tables)
         self.tables_prefixes = None if tables_prefixes is None else TableProcessor.extract_tables(tables_prefixes)
         self.blocking = blocking
+        self.fatal_on_exception = fatal_on_exception
         self.resume_stream = resume_stream
         self.nice_pause = nice_pause
         self.binlog_position_file=binlog_position_file
@@ -314,6 +317,7 @@ class MySQLReader(Reader):
         try:
             while True:
                 logging.debug('Check events in binlog stream')
+                print("FATAL ON EXCEPTION FLAG HAS VALUE", self.fatal_on_exception)
 
                 self.init_fetch_loop()
 
@@ -349,16 +353,19 @@ class MySQLReader(Reader):
                     logging.info("SIGINT received. Pass it further.")
                     raise
                 except Exception as ex:
-                    if self.blocking:
+
+                    print("did we enter into the exception at least?", self.fatal_on_exception)
+
+                    if self.fatal_on_exception:
                         # we'd like to continue waiting for data
                         # report and continue cycle
-                        logging.warning("Got an exception, skip it in blocking mode")
-                        logging.warning(ex)
-                    else:
-                        # do not continue, report error and exit
-                        logging.critical("Got an exception, abort it in non-blocking mode")
+                        logging.critical("Got an exception, abort in fataling mode")
                         logging.critical(ex)
                         sys.exit(1)
+                    else:
+                        # do not continue, report error and exit
+                        logging.warning("Got an exception, skip it in non-fataling mode")
+                        logging.warning(ex)
 
                 # all events fetched (or none of them available)
 

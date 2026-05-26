@@ -13,6 +13,7 @@ CH_MYSQL="-m clickhouse_mysql.main"
 $PYTHON $CH_MYSQL ${*:1} \
     --src-resume \
     --src-wait \
+    --src-fatal-on-exception \
     --src-host=127.0.0.1 \
     --src-user=reader \
     --src-password=qwerty \
